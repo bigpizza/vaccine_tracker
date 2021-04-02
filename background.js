@@ -3,7 +3,7 @@ let myLat = 37.3382;
 let myLng = -121.8863;
 let radiusInMeter = 80_000;
 
-const INTERVAL_IN_MIN = 5; // time in ms
+const INTERVAL_IN_MIN = 5; // time in minutes
 let intervalHandler = null;
 
 function distance(lat, lng) {
