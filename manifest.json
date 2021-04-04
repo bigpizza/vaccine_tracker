@@ -1,7 +1,7 @@
 {
-  "name": "Vaccine tracker",
-  "description": "...",
-  "version": "1.0",
+  "name": "Safeway Vaccine Tracker",
+  "description": "Track COVID-19 vaccine availability at Safeway around you.",
+  "version": "1.1",
   "manifest_version": 2,
   "background": {
     "service_worker": "background.js"
@@ -11,6 +11,7 @@
     "48": "icon.png",
     "16": "icon.png"
   },
+  "browser_action": {},
   "permissions": [
     "webRequest",
     "notifications",

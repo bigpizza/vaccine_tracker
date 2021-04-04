@@ -32,8 +32,10 @@ let muteMap = {
 function checkSafeway() {
   console.log('checking safeway...');
   const SAFEWAY_URL = 'https://s3-us-west-2.amazonaws.com/mhc.cdn.content/vaccineAvailability.json?v=1617224752876';
+
   fetch(SAFEWAY_URL).then(r => r.json()).then(result => {
     let availableResults = [];
+    let entryCount = 0;
     for (const entry of result) {
       if (entry['availability'] == 'no') continue;
 
@@ -42,6 +44,8 @@ function checkSafeway() {
       if (distance(lat, lng) > radiusInMeter) {
         continue;
       }
+
+      entryCount += 1;
       if (entry['id'] in muteMap) {
         let mutedTimestamp = muteMap[entry['id']];
         if (new Date().getTime() - mutedTimestamp >= 1000 * 60 * 60 * 24) {
@@ -63,11 +67,24 @@ function checkSafeway() {
           { action: 'Go!', title: 'Go!' }
         ]
       };
-      console.log('valid entry: ', entry);
+      // console.log('valid entry: ', entry);
       registration.showNotification(entry['address'], options);
-    }
-  })
 
+    }
+    console.log('valid entry: ', entryCount);
+
+    if (entryCount > 10) {
+      chrome.browserAction.setBadgeBackgroundColor({color: '#11F711'});
+      chrome.browserAction.setBadgeText({text: '10+'});
+    } else if (entryCount === 0) {
+      chrome.browserAction.setBadgeBackgroundColor({color: '#F71111'});
+      chrome.browserAction.setBadgeText({text: entryCount.toString()});
+    } else {
+      chrome.browserAction.setBadgeBackgroundColor({color: '#F7B211'});
+      chrome.browserAction.setBadgeText({text: entryCount.toString()});
+    }
+
+  })
 }
 
 function checkAll() {
